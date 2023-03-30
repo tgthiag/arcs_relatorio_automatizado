@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:arcs_relatorio_automatizado/ResultsScreeen.dart';
 import 'package:flutter/material.dart';
 import 'package:excel_to_json/excel_to_json.dart';
 
@@ -42,9 +43,17 @@ class _MyHomePageState extends State<MyHomePage> {
         item["Ano"] > 2020 &&
         item["Área responsável"] == "CONVERSÃO");
 
-    filteredData.forEach((item) {
-      print(item);
-    });
+    novaTela(filteredData);
+    // Navigator.pushNamed(
+    //   context,
+    //   '/second_screen',
+    //   arguments: filteredData.toList(), // pass filteredData as a parameter
+    // );
+  }
+  @override
+  void initState() {
+    super.initState();
+    _importFromExcel();
   }
 
   @override
@@ -57,137 +66,15 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
         alignment: Alignment.center,
         margin: EdgeInsets.all(20),
-        child: Table(
-            columnWidths: {
-              0: FlexColumnWidth(1),
-              1: FlexColumnWidth(2),
-              2: FlexColumnWidth(2),
-              3: FlexColumnWidth(2),
-              4: FlexColumnWidth(2),
-            },
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            border: TableBorder.all(
-                width: 1.0,
-                color: Colors.grey,
-                borderRadius: const BorderRadius.all(Radius.circular(10))),
-            children: [
-              TableRow(
-                  decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(10))),
-                  children: [
-                    Text('Setores',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('Ultima reclamação:',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text('Recorde anterior\n sem reclamações:',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text("Arc's procedentes\nno mês ",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text("Arc's procedentes\nno ano ",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                  ]),
-              TableRow(children: [
-                Padding(
-                    padding: EdgeInsets.all(4),
-                    //apply padding to all four sides
-                    child: Text('Flap Disk',
-                        style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('Dart', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-              ]),
-              TableRow(children: [
-                Padding(
-                    padding: EdgeInsets.all(4),
-                    //apply padding to all four sides
-                    child: Text('Folhas',
-                        style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('Java', textAlign: TextAlign.center),
-                Text('James Gosling', textAlign: TextAlign.center),
-                Text('James Gosling', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-              ]),
-              TableRow(children: [
-                Padding(
-                    padding: EdgeInsets.all(4),
-                    //apply padding to all four sides
-                    child: Text('Cinta Larga',
-                        style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('sdasdas', textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-              ]),
-              TableRow(children: [
-                Padding(
-                    padding: EdgeInsets.all(4),
-                    //apply padding to all four sides
-                    child: Text('Cinta Estreita',
-                        style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('Dart', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-              ]),
-              TableRow(children: [
-                Padding(
-                    padding: EdgeInsets.all(4),
-                    //apply padding to all four sides
-                    child: Text('Rolos',
-                        style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('Java', textAlign: TextAlign.center),
-                Text('James Gosling', textAlign: TextAlign.center),
-                Text('James Gosling', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-              ]),
-              TableRow(children: [
-                Padding(
-                    padding: EdgeInsets.all(4),
-                    //apply padding to all four sides
-                    child: Text('Pluma',
-                        style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('sdasdas', textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-              ]),
-              TableRow(children: [
-                Padding(
-                    padding: EdgeInsets.all(4),
-                    //apply padding to all four sides
-                    child: Text('Fibra',
-                        style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('sdasdas', textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-              ]),
-              TableRow(children: [
-                Padding(
-                    padding: EdgeInsets.all(4),
-                    //apply padding to all four sides
-                    child: Text('SpeedLock',
-                        style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('sdasdas', textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-              ]),
-            ]),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _importFromExcel,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        child: Text("olá")
+    )
+    );
+  }
+  novaTela(filteredList) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ResultsScreen(filteredList)),
     );
   }
 }
