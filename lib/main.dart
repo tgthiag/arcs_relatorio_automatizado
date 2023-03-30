@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:arcs_relatorio_automatizado/ResultsScreeen.dart';
 import 'package:flutter/material.dart';
 import 'package:excel_to_json/excel_to_json.dart';
+import 'dart:collection';
 
 void main() {
   runApp(const MyApp());
@@ -43,12 +44,17 @@ class _MyHomePageState extends State<MyHomePage> {
         item["Ano"] > 2020 &&
         item["Área responsável"] == "CONVERSÃO");
 
-    novaTela(filteredData);
-    // Navigator.pushNamed(
-    //   context,
-    //   '/second_screen',
-    //   arguments: filteredData.toList(), // pass filteredData as a parameter
-    // );
+    Map<String, List<dynamic>> groupedData = HashMap();
+    filteredData.forEach((item) {
+      String key = item["ORIGEM DA ARC"];
+      if (!groupedData.containsKey(key)) {
+        groupedData[key] = [item];
+      } else {
+        groupedData[key]!.add(item);
+      }
+    });
+
+    novaTela(groupedData);
   }
   @override
   void initState() {
