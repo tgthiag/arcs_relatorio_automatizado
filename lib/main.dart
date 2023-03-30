@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
+
   final String title;
 
   @override
@@ -37,14 +38,14 @@ class _MyHomePageState extends State<MyHomePage> {
     var rest = jsonfile["Banco de dados"];
 
     final filteredData = rest.where((item) =>
-    item["Conclusão"] == "PROCEDENTE" && item["Ano"] > 2020 && item["Área responsável"] == "CONVERSÃO"
-    );
+        item["Conclusão"] == "PROCEDENTE" &&
+        item["Ano"] > 2020 &&
+        item["Área responsável"] == "CONVERSÃO");
 
     filteredData.forEach((item) {
       print(item);
     });
-
-    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,99 +66,122 @@ class _MyHomePageState extends State<MyHomePage> {
               4: FlexColumnWidth(2),
             },
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            border: TableBorder.all(width: 1.0, color: Colors.grey,borderRadius: const BorderRadius.all(Radius.circular(10))),
+            border: TableBorder.all(
+                width: 1.0,
+                color: Colors.grey,
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
             children: [
               TableRow(
-                  decoration: BoxDecoration( color: Colors.grey, borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
-                  children :[
-                Text('Setores',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
-                Text('Ultima reclamação:',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
-                Text('Recorde anterior\n sem reclamações:',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text("Arc's procedentes\nno mês ",textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text("Arc's procedentes\nno ano ",textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold)),
-              ]),
-              TableRow(children :[
+                  decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(10))),
+                  children: [
+                    Text('Setores',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('Ultima reclamação:',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('Recorde anterior\n sem reclamações:',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text("Arc's procedentes\nno mês ",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text("Arc's procedentes\nno ano ",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                  ]),
+              TableRow(children: [
                 Padding(
-                    padding: EdgeInsets.all(4), //apply padding to all four sides
-                    child:
-                Text('Flap Disk', style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('Dart',textAlign: TextAlign.center),
-                Text('Lars Bak',textAlign: TextAlign.center),
-                Text('Lars Bak',textAlign: TextAlign.center),
-                Text('Lars Bak',textAlign: TextAlign.center),
+                    padding: EdgeInsets.all(4),
+                    //apply padding to all four sides
+                    child: Text('Flap Disk',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
+                Text('Dart', textAlign: TextAlign.center),
+                Text('Lars Bak', textAlign: TextAlign.center),
+                Text('Lars Bak', textAlign: TextAlign.center),
+                Text('Lars Bak', textAlign: TextAlign.center),
               ]),
-              TableRow(children :[
+              TableRow(children: [
                 Padding(
-                    padding: EdgeInsets.all(4), //apply padding to all four sides
-                    child:
-                Text('Folhas', style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('Java',textAlign: TextAlign.center),
-                Text('James Gosling',textAlign: TextAlign.center),
-                Text('James Gosling',textAlign: TextAlign.center),
-                Text('Lars Bak',textAlign: TextAlign.center),
+                    padding: EdgeInsets.all(4),
+                    //apply padding to all four sides
+                    child: Text('Folhas',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
+                Text('Java', textAlign: TextAlign.center),
+                Text('James Gosling', textAlign: TextAlign.center),
+                Text('James Gosling', textAlign: TextAlign.center),
+                Text('Lars Bak', textAlign: TextAlign.center),
               ]),
-              TableRow(children :[
+              TableRow(children: [
                 Padding(
-                    padding: EdgeInsets.all(4), //apply padding to all four sides
-                    child:
-                Text('Cinta Larga', style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('sdasdas',textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling',textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling',textAlign: TextAlign.center),
-                Text('Lars Bak',textAlign: TextAlign.center),
+                    padding: EdgeInsets.all(4),
+                    //apply padding to all four sides
+                    child: Text('Cinta Larga',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
+                Text('sdasdas', textAlign: TextAlign.center),
+                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
+                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
+                Text('Lars Bak', textAlign: TextAlign.center),
               ]),
-              TableRow(children :[
+              TableRow(children: [
                 Padding(
-                    padding: EdgeInsets.all(4), //apply padding to all four sides
-                    child:
-                Text('Cinta Estreita', style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('Dart',textAlign: TextAlign.center),
-                Text('Lars Bak',textAlign: TextAlign.center),
-                Text('Lars Bak',textAlign: TextAlign.center),
-                Text('Lars Bak',textAlign: TextAlign.center),
+                    padding: EdgeInsets.all(4),
+                    //apply padding to all four sides
+                    child: Text('Cinta Estreita',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
+                Text('Dart', textAlign: TextAlign.center),
+                Text('Lars Bak', textAlign: TextAlign.center),
+                Text('Lars Bak', textAlign: TextAlign.center),
+                Text('Lars Bak', textAlign: TextAlign.center),
               ]),
-              TableRow(children :[
+              TableRow(children: [
                 Padding(
-                    padding: EdgeInsets.all(4), //apply padding to all four sides
-                    child:
-                Text('Rolos', style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('Java',textAlign: TextAlign.center),
-                Text('James Gosling',textAlign: TextAlign.center),
-                Text('James Gosling',textAlign: TextAlign.center),
-                Text('Lars Bak',textAlign: TextAlign.center),
+                    padding: EdgeInsets.all(4),
+                    //apply padding to all four sides
+                    child: Text('Rolos',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
+                Text('Java', textAlign: TextAlign.center),
+                Text('James Gosling', textAlign: TextAlign.center),
+                Text('James Gosling', textAlign: TextAlign.center),
+                Text('Lars Bak', textAlign: TextAlign.center),
               ]),
-              TableRow(children :[
+              TableRow(children: [
                 Padding(
-                    padding: EdgeInsets.all(4), //apply padding to all four sides
-                    child:
-                Text('Pluma', style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('sdasdas',textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling',textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling',textAlign: TextAlign.center),
-                Text('Lars Bak',textAlign: TextAlign.center),
+                    padding: EdgeInsets.all(4),
+                    //apply padding to all four sides
+                    child: Text('Pluma',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
+                Text('sdasdas', textAlign: TextAlign.center),
+                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
+                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
+                Text('Lars Bak', textAlign: TextAlign.center),
               ]),
-              TableRow(children :[
+              TableRow(children: [
                 Padding(
-                    padding: EdgeInsets.all(4), //apply padding to all four sides
-                    child:
-                Text('Fibra', style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('sdasdas',textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling',textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling',textAlign: TextAlign.center),
-                Text('Lars Bak',textAlign: TextAlign.center),
+                    padding: EdgeInsets.all(4),
+                    //apply padding to all four sides
+                    child: Text('Fibra',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
+                Text('sdasdas', textAlign: TextAlign.center),
+                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
+                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
+                Text('Lars Bak', textAlign: TextAlign.center),
               ]),
-              TableRow(children :[
+              TableRow(children: [
                 Padding(
-                    padding: EdgeInsets.all(4), //apply padding to all four sides
-                    child:
-                Text('SpeedLock', style: TextStyle(fontWeight: FontWeight.bold))),
-                Text('sdasdas',textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling',textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling',textAlign: TextAlign.center),
-                Text('Lars Bak',textAlign: TextAlign.center),
+                    padding: EdgeInsets.all(4),
+                    //apply padding to all four sides
+                    child: Text('SpeedLock',
+                        style: TextStyle(fontWeight: FontWeight.bold))),
+                Text('sdasdas', textAlign: TextAlign.center),
+                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
+                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
+                Text('Lars Bak', textAlign: TextAlign.center),
               ]),
-            ]
-        ),
+            ]),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _importFromExcel,
