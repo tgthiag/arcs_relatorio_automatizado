@@ -40,11 +40,11 @@ class _MyHomePageState extends State<MyHomePage> {
     var rest = jsonfile["Banco de dados"];
 
     final filteredData = rest.where((item) =>
-        item["Conclusão"] == "PROCEDENTE" &&
-        item["Ano"] > 2020 &&
-        item["Área responsável"] == "CONVERSÃO");
+            item["Conclusão"] == "PROCEDENTE" &&
+            item['Ano'] >= 2020 &&
+            item["Área responsável"] == "CONVERSÃO" && item["ORIGEM DA ARC"] != null);
 
-    Map<String, List<dynamic>> groupedData = HashMap();
+    Map<String, List<dynamic>>? groupedData = HashMap();
     filteredData.forEach((item) {
       String key = item["ORIGEM DA ARC"];
       if (!groupedData.containsKey(key)) {
@@ -56,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     novaTela(groupedData);
   }
+
   @override
   void initState() {
     super.initState();
@@ -65,22 +66,20 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Container(
-        alignment: Alignment.center,
-        margin: EdgeInsets.all(20),
-        child: Text("olá")
-    )
-    );
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
+        ),
+        body: Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.all(20),
+            child: const Text("Selecione o arquivo DADOS ARC-CUMBICA.xlsx")));
   }
+
   novaTela(filteredList) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => ResultsScreen(filteredList)),
+      MaterialPageRoute(builder: (context) => ResultsScreen(filteredList)),
     );
   }
 }
