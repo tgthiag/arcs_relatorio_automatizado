@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ResultsScreen extends StatelessWidget {
-  late final filteredList;
-  ResultsScreen(this.filteredList);
-  // late final flapData = FilteredList.where((item) =>
-  // item["ORIGEM DA ARC"] == "FLAP DISC"
-  // );
-  getdaysSince(setor){
+  final filteredList;
+
+  const ResultsScreen(this.filteredList);
+
+  getdaysSince(setor) {
     DateTime? mostRecentDate;
+
     for (var item in filteredList[setor]) {
       String? dateString = item["Abertura\ndo ARC"];
       if (dateString == null) continue;
@@ -20,16 +20,57 @@ class ResultsScreen extends StatelessWidget {
     return '${daysSince.inDays} dias';
   }
 
+  String getBiggestDaysDifference(setor) {
+    int maxDifference = 0;
+    DateTime? previousDate;
+
+    var filteredData = filteredList[setor];
+    filteredData.sort((a, b) => DateTime.parse(a["Abertura\ndo ARC"])
+        .compareTo(DateTime.parse(b["Abertura\ndo ARC"])));
+
+    for (var item in filteredData) {
+      String dateString = item["Abertura\ndo ARC"];
+      DateTime date = DateTime.parse(dateString);
+
+      if (previousDate != null) {
+        Duration difference = date.difference(previousDate);
+        int daysDifference = difference.inDays;
+
+        if (daysDifference > maxDifference) {
+          maxDifference = daysDifference;
+        }
+      }
+
+      previousDate = date;
+    }
+
+    return '$maxDifference dias';
+  }
+
+  arcsThisMonthYear(setor, period) {
+    var now = DateTime.now();
+    if (period == "m") {
+      var filteredDataMonth = filteredList[setor].where((item) =>
+          DateTime.parse(item["Abertura\ndo ARC"]).year == now.year &&
+          DateTime.parse(item["Abertura\ndo ARC"]).month == now.month);
+      return filteredDataMonth.length.toString();
+    } else if (period == "y") {
+      var filteredDataYear = filteredList[setor].where(
+          (item) => DateTime.parse(item["Abertura\ndo ARC"]).year == now.year);
+      return filteredDataYear.length.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Relatório de ARC's"),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: const Text("Relatório de ARC's", style: TextStyle(fontFamily: "Tomorrow", fontWeight: FontWeight.bold, color: Colors.white)),
       ),
       body: Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         child: Table(
             columnWidths: const {
               0: FlexColumnWidth(1),
@@ -41,25 +82,25 @@ class ResultsScreen extends StatelessWidget {
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             border: TableBorder.all(
                 width: 1.0,
-                color: Colors.grey,
+                color: Colors.blueGrey,
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
             children: [
               TableRow(
-                  decoration: const BoxDecoration(
-                      color: Colors.grey,
+                  decoration: BoxDecoration(
+                      color: Colors.blueGrey[100],
                       borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(10))),
+                          BorderRadius.vertical(top: Radius.circular(10))),
                   children: [
-                    const Text('Setores',
+                    Text('Setores',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     Text("Ultima reclamação \nProcedente",
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                    const Text('Recorde anterior\n sem reclamações:',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('Recorde anterior\n sem reclamações:',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    const Text("Arc's procedentes\nno mês ",
+                    Text("Arc's procedentes\nno mês ",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     Text("Arc's procedentes\nno ano ",
@@ -67,100 +108,121 @@ class ResultsScreen extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ]),
               TableRow(children: [
-                Padding(
+                const Padding(
                     padding: EdgeInsets.all(4),
                     //apply padding to all four sides
                     child: Text('Flap Disk',
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 Text(getdaysSince('FLAP DISC'), textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
+                Text(getBiggestDaysDifference("FLAP DISC"),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear('FLAP DISC', "m"),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear('FLAP DISC', "y"),
+                    textAlign: TextAlign.center),
               ]),
               TableRow(children: [
-                Padding(
+                const Padding(
                     padding: EdgeInsets.all(4),
                     //apply padding to all four sides
                     child: Text('Folhas',
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 Text(getdaysSince('FOLHAS'), textAlign: TextAlign.center),
-                Text('James Gosling', textAlign: TextAlign.center),
-                Text('James Gosling', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
+                Text(getBiggestDaysDifference("FOLHAS"),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear("FOLHAS", "m"),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear("FOLHAS", "y"),
+                    textAlign: TextAlign.center),
               ]),
               TableRow(children: [
-                Padding(
+                const Padding(
                     padding: EdgeInsets.all(4),
                     //apply padding to all four sides
                     child: Text('Cinta Larga',
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 Text(getdaysSince('CINTA LARGA'), textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
+                Text(getBiggestDaysDifference("CINTA LARGA"),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear("CINTA LARGA", "m"),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear("CINTA LARGA", "y"),
+                    textAlign: TextAlign.center),
               ]),
               TableRow(children: [
-                Padding(
+                const Padding(
                     padding: EdgeInsets.all(4),
                     //apply padding to all four sides
                     child: Text('Cinta Estreita',
                         style: TextStyle(fontWeight: FontWeight.bold))),
-                Text(getdaysSince('CINTA ESTREITA'), textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
+                Text(getdaysSince('CINTA ESTREITA'),
+                    textAlign: TextAlign.center),
+                Text(getBiggestDaysDifference("CINTA ESTREITA"),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear("CINTA ESTREITA", "m"),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear("CINTA ESTREITA", "y"),
+                    textAlign: TextAlign.center),
               ]),
               TableRow(children: [
-                Padding(
+                const Padding(
                     padding: EdgeInsets.all(4),
                     //apply padding to all four sides
                     child: Text('Rolos',
                         style: TextStyle(fontWeight: FontWeight.bold))),
-                Text(getdaysSince('CORTADEIRA DE ROLOS '), textAlign: TextAlign.center),
-                Text('James Gosling', textAlign: TextAlign.center),
-                Text('James Gosling', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
+                Text(getdaysSince('CORTADEIRA DE ROLOS '),
+                    textAlign: TextAlign.center),
+                Text(getBiggestDaysDifference('CORTADEIRA DE ROLOS '),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear("CORTADEIRA DE ROLOS ", "m"),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear("CORTADEIRA DE ROLOS ", "y"),
+                    textAlign: TextAlign.center),
               ]),
               TableRow(children: [
-                Padding(
+                const Padding(
                     padding: EdgeInsets.all(4),
                     //apply padding to all four sides
                     child: Text('Pluma',
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 Text(getdaysSince('VELCRO'), textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
+                Text(getBiggestDaysDifference('VELCRO'),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear("VELCRO", "m"),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear("VELCRO", "y"),
+                    textAlign: TextAlign.center),
               ]),
               TableRow(children: [
-                Padding(
+                const Padding(
                     padding: EdgeInsets.all(4),
                     //apply padding to all four sides
                     child: Text('Fibra',
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 Text(getdaysSince('FIBRAS'), textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
+                Text(getBiggestDaysDifference('FIBRAS'),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear("FIBRAS", "m"),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear("FIBRAS", "y"),
+                    textAlign: TextAlign.center),
               ]),
               TableRow(children: [
-                Padding(
+                const Padding(
                     padding: EdgeInsets.all(4),
                     //apply padding to all four sides
                     child: Text('SpeedLock',
                         style: TextStyle(fontWeight: FontWeight.bold))),
                 Text(getdaysSince('SPEED LOCK'), textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Jamsadasdes Gosling', textAlign: TextAlign.center),
-                Text('Lars Bak', textAlign: TextAlign.center),
+                Text(getBiggestDaysDifference('SPEED LOCK'),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear('SPEED LOCK', "m"),
+                    textAlign: TextAlign.center),
+                Text(arcsThisMonthYear('SPEED LOCK', "y"),
+                    textAlign: TextAlign.center),
               ]),
             ]),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => print(getdaysSince('FLAP DISC')),
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
