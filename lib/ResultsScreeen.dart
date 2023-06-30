@@ -66,14 +66,14 @@ class ResultsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text("Relatório de ARC's", style: TextStyle(fontFamily: "Tomorrow", fontWeight: FontWeight.bold, color: Colors.white)),
+        title: const Text("Relatório de ARC's Procedentes", style: TextStyle(fontFamily: "Tomorrow", fontWeight: FontWeight.bold, color: Colors.white)),
       ),
       body: Container(
         alignment: Alignment.center,
         margin: const EdgeInsets.all(20),
         child: Table(
             columnWidths: const {
-              0: FlexColumnWidth(1),
+              0: FlexColumnWidth(2),
               1: FlexColumnWidth(2),
               2: FlexColumnWidth(2),
               3: FlexColumnWidth(2),
