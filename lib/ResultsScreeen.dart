@@ -1,9 +1,48 @@
+import 'dart:convert';
+import 'package:arcs_relatorio_automatizado/data/firebase_data.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:arcs_relatorio_automatizado/functions/capitalize.dart';
+import 'package:intl/intl.dart';
 
 class ResultsScreen extends StatelessWidget {
   final filteredList;
+  final now = DateTime.now();
 
-  const ResultsScreen(this.filteredList);
+  ResultsScreen(this.filteredList, {super.key});
+
+  _sendDateToFirebase() async {
+    var mainUrl = "$firebaseLink/data/sga/cumbica/date.json";
+    final url = mainUrl;
+    String formattedDateTime =
+        DateFormat('dd/MM/yy - HH:mm').format(now);
+
+    // Create your data object with the formatted date and time
+    Map<String, dynamic> data = {
+      "date": formattedDateTime,
+      // Add other data fields if needed
+    };
+    final response = await http.patch(Uri.parse(url), body: json.encode(data));
+    if (response.statusCode == 200) {
+      print('Date sent successfully|||||||||||||||||||||||||||||||||||||||||');
+    } else {
+      print('Failed to send date. Error: ${response.statusCode}');
+    }
+  }
+
+  _sendDataToFirebase(Map<String, dynamic> data, folder) async {
+    var mainUrl =
+        "$firebaseLink/data/sga/cumbica/${folder.toString().toLowerCase()}.json";
+    final url = mainUrl;
+    final response = await http.patch(Uri.parse(url), body: json.encode(data));
+
+    if (response.statusCode == 200) {
+      print('Data sent successfully');
+    } else {
+      print('Failed to send data. Error: ${response.statusCode}');
+    }
+  }
 
   getdaysSince(setor) {
     DateTime? mostRecentDate;
@@ -16,7 +55,9 @@ class ResultsScreen extends StatelessWidget {
         mostRecentDate = date;
       }
     }
-    Duration daysSince = DateTime.now().difference(mostRecentDate!);
+    Duration daysSince = now.difference(mostRecentDate!);
+    Map<String, dynamic> data = {'days_since': daysSince.inDays};
+    _sendDataToFirebase(data, setor.toString().toLowerCase());
     return '${daysSince.inDays} dias';
   }
 
@@ -43,30 +84,56 @@ class ResultsScreen extends StatelessWidget {
 
       previousDate = date;
     }
-
+    Map<String, dynamic> data = {'biggest_difference': maxDifference};
+    _sendDataToFirebase(data, setor.toString().toLowerCase());
     return '$maxDifference dias';
   }
 
   arcsThisMonthYear(setor, period) {
-    var now = DateTime.now();
     if (period == "m") {
       var filteredDataMonth = filteredList[setor].where((item) =>
           DateTime.parse(item["Abertura\ndo ARC"]).year == now.year &&
           DateTime.parse(item["Abertura\ndo ARC"]).month == now.month);
+      Map<String, dynamic> data = {
+        'this_${period == "m" ? 'month' : 'year'}':
+            filteredDataMonth.length.toString()
+      };
+      _sendDataToFirebase(data, setor.toString().toLowerCase());
       return filteredDataMonth.length.toString();
     } else if (period == "y") {
       var filteredDataYear = filteredList[setor].where(
           (item) => DateTime.parse(item["Abertura\ndo ARC"]).year == now.year);
+      Map<String, dynamic> data = {
+        'this_${period == "m" ? 'month' : 'year'}':
+            filteredDataYear.length.toString()
+      };
+      _sendDataToFirebase(data, setor.toString().toLowerCase());
       return filteredDataYear.length.toString();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    _sendDateToFirebase();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text("Relatório de ARC's Procedentes", style: TextStyle(fontFamily: "Tomorrow", fontWeight: FontWeight.bold, color: Colors.white)),
+        title: const Text(
+          "Relatório de ARC's Procedentes",
+          style: TextStyle(
+            fontFamily: "Tomorrow",
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.close),
+            onPressed: () {
+              SystemNavigator.pop(); // Closes the app
+            },
+          ),
+        ],
       ),
       body: Container(
         alignment: Alignment.center,
